@@ -20,23 +20,14 @@ export default createStore({
   },
   actions: {
     async login({ commit }, credentials) {
-      try {
-        
-        const response = await axios.post(`${process.env.VUE_APP_API_URL}/auth/login`, credentials);
-
-        console.log('response es')
-        console.log(response)
+       const response = await axios.post(`${process.env.VUE_APP_API_URL}/auth/login`, credentials);
 
         if (response.status === 200 && response.data.token) {
+            console.log(response.data)
           commit('setLoggedIn', true);
           commit('setUserRole', response.data.role);
           commit('setToken', response.data.token);
-        } else {
-          console.error('Error en la autenticación ', response.message);
-        }
-      } catch (error) {
-        console.error('Error en la solicitud de autenticación:', error.message);
-      }
+        } 
     },
 
   },

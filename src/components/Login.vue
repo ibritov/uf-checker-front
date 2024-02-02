@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import axios from 'axios';
 
 export default {
   data() {
@@ -39,29 +39,29 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['login']),
+    
     async handleLogin() {
       try {
-        // Llama a la acción 'login' de Vuex para manejar la lógica de inicio de sesión
+        
         const credentials = { username: this.username, password: this.password };
-        await this.login(credentials);
+        const response = await axios.post(`${process.env.VUE_APP_API_URL}/auth/login`, credentials);
+        
+        localStorage.setItem('token', response.data.token)
+        localStorage.setItem('userRole', response.data.roler)
 
-        // Emitir un evento indicando que el inicio de sesión fue exitoso
-        this.$emit('login-success');
-        console.log(credentials); 
-        // Obtener el rol del usuario después del inicio de sesión
-        const userRole = this.$store.getters.userRole;
+        console.log(response.data);
 
-        // Redireccionar según el rol del usuario
-        if (userRole === 'administrador') {
-          this.$router.push({ name: 'admin' }); // Ajusta 'admin' según tus rutas
+        if (response.data.roler === 'ADMINISTRADOR') {
+          this.$router.push({ name: 'admin' }); 
         }
-        if (userRole === 'ejecutivo') {
-          this.$router.push({ name: 'user' }); // Ajusta 'user' según tus rutas
-        }
+        if (response.data.roler === 'ENCARGADO') {
+            console.log('encargado sou');
+          this.$router.push({ name: 'user' }); 
+        } 
+        
       } catch (error) {
         // Maneja errores de la lógica de inicio de sesión, como credenciales incorrectas
-        console.error('Error en el inicio de sesión:', error.message);
+        console.error('Error en el inicio de sesión', error);
       }
     },
   },

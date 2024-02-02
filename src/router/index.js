@@ -1,17 +1,16 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import Vue from 'vue';
+import Router from 'vue-router';
 import LoginComponent from '../components/Login.vue';
 import AdminComponent from '../components/Admin.vue';
 import UserComponent from '../components/User.vue';
 
-const routes = [
-  { path: '/login', component: LoginComponent },
-  { path: '/admin', component: AdminComponent, name: 'admin' },
-  { path: '/user', component: UserComponent, name: 'user' },
-];
+Vue.use(Router)
 
-const router = createRouter({
-  history: createWebHistory(),
-  routes,
+
+export default new Router({
+    routes: [
+        { path: '/login', component: LoginComponent },
+        { path: '/admin', component: AdminComponent, name: 'admin' },
+        { path: '/user', component: UserComponent, name: 'user' },
+      ]
 });
-
-export default router;
