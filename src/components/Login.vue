@@ -49,6 +49,7 @@ export default {
         
         localStorage.setItem('token', response.data.token)
         localStorage.setItem('userRole', response.data.role)
+        localStorage.setItem('userId', response.data.userId)
 
        
         if (response.data.role === 'ADMINISTRADOR') {
