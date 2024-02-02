@@ -28,7 +28,8 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from 'axios'
+import Swal from 'sweetalert2'
 
 export default {
   data() {
@@ -47,21 +48,24 @@ export default {
         const response = await axios.post(`${process.env.VUE_APP_API_URL}/auth/login`, credentials);
         
         localStorage.setItem('token', response.data.token)
-        localStorage.setItem('userRole', response.data.roler)
+        localStorage.setItem('userRole', response.data.role)
 
-        console.log(response.data);
-
-        if (response.data.roler === 'ADMINISTRADOR') {
+       
+        if (response.data.role === 'ADMINISTRADOR') {
           this.$router.push({ name: 'admin' }); 
         }
-        if (response.data.roler === 'ENCARGADO') {
-            console.log('encargado sou');
-          this.$router.push({ name: 'user' }); 
+        if (response.data.role === 'ENCARGADO') {
+          this.$router.push('/user'); 
         } 
         
       } catch (error) {
-        // Maneja errores de la lógica de inicio de sesión, como credenciales incorrectas
-        console.error('Error en el inicio de sesión', error);
+        //console.error('Error en el inicio de sesión', error);
+        Swal.fire({
+        title: '¡Usuario no encontrado!',
+        text: '¿Ingreso sus credenciales correctamente?',
+        icon: 'error',
+        confirmButtonText: 'Cool'
+        })
       }
     },
   },
