@@ -8,17 +8,20 @@
                         <label for="username" class="block text-sm font-medium text-gray-600 dark:text-gray-300">
                             Nombre de usuario
                         </label>
-                        <input type="text" id="username" v-model="username" class="mt-1 p-2 w-full border rounded-md dark:bg-gray-600" required />
+                        <input type="text" id="username" v-model="username"
+                            class="mt-1 p-2 w-full border rounded-md dark:bg-gray-600" required />
 
                     </div>
                     <div class="mb-4">
                         <label for="password" class="block text-sm font-medium text-gray-600 dark:text-gray-300">
                             Contraseña
                         </label>
-                        <input type="password" id="password" v-model="password" class="mt-1 p-2 w-full border rounded-md dark:bg-gray-600" required />
+                        <input type="password" id="password" v-model="password"
+                            class="mt-1 p-2 w-full border rounded-md dark:bg-gray-600" required />
 
                     </div>
-                    <button @click="handleLogin" type="submit" class="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600">
+                    <button @click="handleLogin" type="submit"
+                        class="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600">
                         Ingresar
                     </button>
                 </form>
@@ -30,44 +33,48 @@
 <script>
 import axios from 'axios'
 import Swal from 'sweetalert2'
+import { mapMutations } from 'vuex';
 
 export default {
-  data() {
-    return {
-      username: '',
-      password: '',
-      themeClass: 'dark-theme',
-    };
-  },
-  methods: {
-    
-    async handleLogin() {
-      try {
-        
-        const credentials = { username: this.username, password: this.password };
-        const response = await axios.post(`${process.env.VUE_APP_API_URL}/auth/login`, credentials);
-        
-        localStorage.setItem('token', response.data.token)
-        localStorage.setItem('userRole', response.data.role)
-        localStorage.setItem('userId', response.data.userId)
-
-       
-        if (response.data.role === 'ADMINISTRADOR') {
-          this.$router.push({ name: 'admin' }); 
-        }
-        if (response.data.role === 'ENCARGADO') {
-          this.$router.push('/user'); 
-        } 
-        
-      } catch (error) {
-        Swal.fire({
-        title: '¡Usuario no encontrado!',
-        text: '¿Ingreso sus credenciales correctamente?',
-        icon: 'error',
-        confirmButtonText: 'Cool'
-        })
-      }
+    data() {
+        return {
+            username: '',
+            password: '',
+            themeClass: 'dark-theme',
+            showMenu: false,
+        };
     },
-  },
+    methods: {
+        ...mapMutations(['setUserRole']),
+        async handleLogin() {
+            try {
+
+                const credentials = { username: this.username, password: this.password };
+                const response = await axios.post(`${process.env.VUE_APP_API_URL}/auth/login`, credentials);
+
+                localStorage.setItem('token', response.data.token)
+                localStorage.setItem('userRole', response.data.role)
+                localStorage.setItem('userId', response.data.userId)
+
+
+                if (response.data.role === 'ADMINISTRADOR') {
+                    await this.setUserRole('ADMINISTRADOR');
+                    this.$router.push({ name: 'admin' });
+                }
+                if (response.data.role === 'ENCARGADO') {
+                    await this.setUserRole('ENCARGADO');
+                    this.$router.push('/user');
+                }
+
+            } catch (error) {
+                Swal.fire({
+                    title: '¡Usuario no encontrado!',
+                    text: '¿Ingreso sus credenciales correctamente?',
+                    icon: 'error',
+                    confirmButtonText: 'Cool'
+                })
+            }
+        },
+    },
 };
 </script>

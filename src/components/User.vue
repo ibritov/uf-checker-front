@@ -48,6 +48,7 @@ export default {
             amountConverted: "",
             showResult: false,
             convertedUf: 0,
+            showMenu: true,
         };
     },
     components: {
