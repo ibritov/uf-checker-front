@@ -60,7 +60,6 @@ export default {
         } 
         
       } catch (error) {
-        //console.error('Error en el inicio de sesión', error);
         Swal.fire({
         title: '¡Usuario no encontrado!',
         text: '¿Ingreso sus credenciales correctamente?',
