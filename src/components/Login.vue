@@ -50,8 +50,8 @@ export default {
             try {
 
                 const credentials = { username: this.username, password: this.password };
-                
-                const response = await axios.post(`${process.env.VUE_APP_API_URL}/auth/login`, credentials);
+                console.log(`${process.env.VUE_APP_API_URL});
+                const response = await axios.post(`${process.env.VUE_APP_API_URL}/api/auth/login`, credentials);
 
                 localStorage.setItem('token', response.data.token)
                 localStorage.setItem('userRole', response.data.role)

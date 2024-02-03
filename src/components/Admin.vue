@@ -92,7 +92,7 @@ export default {
             URL.revokeObjectURL(url);
         },
         async fetchData() {
-            const response = await axios.get(`${process.env.VUE_APP_API_URL}/user-check`, {
+            const response = await axios.get(`${process.env.VUE_APP_API_URL}/api/user-check`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 }

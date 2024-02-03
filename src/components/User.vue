@@ -105,7 +105,7 @@ export default {
                     userId: localStorage.getItem('userId'),
                 };
                 
-                const response = await axios.post(`${process.env.VUE_APP_API_URL}/user-check`, requestData , {
+                const response = await axios.post(`${process.env.VUE_APP_API_URL}/api/user-check`, requestData , {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
