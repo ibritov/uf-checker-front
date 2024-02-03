@@ -1,7 +1,7 @@
 <template>
     <div class="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-800 
     ">
-        <div class="bg-white dark:bg-gray-700 p-8 rounded shadow-md max-w-md w-full">
+        <div class=" bg-white dark:bg-gray-700 p-8 rounded shadow-md max-w-md w-full min-w-fit">
             <h1 class="text-2xl font-semibold mb-4 text-center text-zinc-50">Calculadora de UF</h1>
 
 
@@ -28,7 +28,7 @@
                 </button>
             </div>
 
-            <UfConverted v-if="showResult" :convertedUf="convertedUf" :ufValue="ufValue" />
+            <UfConverted v-if="showResult" :amountConverted="amountConverted" :ufValue="ufValue" />
         </div>
     </div>
 </template>
@@ -43,8 +43,8 @@ export default {
     data() {
         return {
             selectedDate: "",
-            cantUf: "",
-            ufValue: 0,
+            cantUf: 0,
+            ufValue: "",
             amountConverted: "",
             showResult: false,
             convertedUf: 0,
@@ -79,7 +79,7 @@ export default {
             const selectedDate = new Date(this.selectedDate)
             const today = new Date()
 
-            if (!this.fechaSeleccionada) {
+            if (!this.selectedDate) {
                 Swal.fire({
                     title: 'Fecha incorrecta',
                     text: 'No puede estar vacio',
@@ -92,7 +92,7 @@ export default {
 
             if (selectedDate > today) {
 
-                this.fechaSeleccionada = ''
+                this.selectedDate = ''
                 Swal.fire({
                     title: 'Fecha incorrecta',
                     text: 'No puede ingresar una fecha mayor a hoy',
@@ -108,7 +108,6 @@ export default {
             try {
                 await this.validateDate()
                 await this.validateCantUf()
-                // Objeto con los datos que se enviarán a la API
                 const requestData = {
                     date: this.selectedDate,
                     cantUf: this.cantUf,
@@ -117,15 +116,9 @@ export default {
                 console.log(requestData)
                 const response = await axios.post(`${process.env.VUE_APP_API_URL}/user-check`, requestData);
 
-                this.selectedDate = response.data.amountConverted.toLocaleString('es-ES', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                });
+                this.amountConverted = response.data.amountConverted.toLocaleString('es-ES');
 
-                this.ufValue = response.data.ufValue.toLocaleString('es-ES', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                });
+                this.ufValue = response.data.ufValue.toLocaleString('es-ES');
 
                 this.showResult = true;
 
