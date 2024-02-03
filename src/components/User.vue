@@ -55,15 +55,6 @@ export default {
         UfConverted,
     },
     methods: {
-        async list() {
-            const response = await axios.get(`${process.env.VUE_APP_API_URL}/user-check`, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                }
-            })
-
-            console.log(response.data)
-        },
         async validateCantUf() {
             if (this.cantUf < 0) {
                 Swal.fire({
@@ -113,8 +104,12 @@ export default {
                     cantUf: this.cantUf,
                     userId: localStorage.getItem('userId'),
                 };
-                console.log(requestData)
-                const response = await axios.post(`${process.env.VUE_APP_API_URL}/user-check`, requestData);
+                
+                const response = await axios.post(`${process.env.VUE_APP_API_URL}/user-check`, requestData , {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
 
                 this.amountConverted = response.data.amountConverted.toLocaleString('es-ES');
 

@@ -105,7 +105,6 @@ export default {
                 user: item.username
             }))
 
-            console.log(this.items)
         },
         filterItems() {
             this.currentPage = 1;
